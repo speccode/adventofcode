@@ -25,6 +25,28 @@ function solvePart1(array $entries): int
     return $valid;
 }
 
+function solvePart2(array $entries): int
+{
+    $valid = 0;
+
+    foreach ($entries as $entry) {
+        [$number, $searchedLetter, $password] = explode(' ', $entry);
+        [$pos1, $pos2] = explode('-', $number);
+        $searchedLetter = rtrim($searchedLetter, ':');
+        $pos1--; $pos2--;
+
+        if ($password[$pos1] === $searchedLetter && $password[$pos2] === $searchedLetter) {
+            continue;
+        }
+
+        if ($password[$pos1] === $searchedLetter || $password[$pos2] === $searchedLetter) {
+            $valid++;
+        }
+    }
+
+    return $valid;
+}
+
 function testPart1(): bool
 {
     $entries = [
@@ -39,7 +61,13 @@ function testPart1(): bool
 
 function testPart2(): bool
 {
-    return true;
+    $entries = [
+        '1-3 a: abcde',
+        '1-3 b: cdefg',
+        '2-9 c: ccccccccc',
+    ];
+
+    return solvePart2($entries) === 1;
 }
 
 if (! testPart1()) {
@@ -53,4 +81,4 @@ if (! testPart2()) {
 $entries = explode(PHP_EOL, trim(file_get_contents(__DIR__ . '/data/02.txt')));
 echo '<pre>';
 echo 'Part 1: ' . solvePart1($entries) . PHP_EOL;
-//echo 'Part 2: ' . solvePart2($entries) . PHP_EOL;
+echo 'Part 2: ' . solvePart2($entries) . PHP_EOL;
